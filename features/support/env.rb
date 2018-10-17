@@ -1,5 +1,6 @@
 require "capybara/cucumber"
 require "selenium/webdriver"
+require "testingbot"
 
 Capybara.default_max_wait_time = 10
 Capybara.default_driver = :selenium
@@ -33,5 +34,11 @@ end
 
 After do | scenario |
   @driver.quit
+  api = TestingBot::Api.new(ENV['TB_KEY'], ENV['TB_SECRET'])
+  if scenario.exception
+    api.update_test(sessionid, { :success => false })
+  else
+    api.update_test(sessionid, { :success => true })
+  end
   Capybara.use_default_driver
 end
