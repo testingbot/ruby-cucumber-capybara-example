@@ -1,0 +1,19 @@
+---
+name: Tests
+
+on: push
+
+jobs:
+  tests:
+    env:
+      TB_KEY: ${{ secrets.TB_KEY }}
+      TB_SECRET: ${{ secrets.TB_SECRET }}
+    name: Unit Testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          bundler-cache: true
+      - run: bundle exec rake test_testingbot
